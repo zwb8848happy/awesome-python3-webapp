@@ -56,7 +56,7 @@ def execute(sql, args, autocommit=True):
              affected = cur.rowcount
              yield from cur.close()
              if not autocommit:
-                 yield from con.commit()
+                 yield from conn.commit()
         except BaseException as e:  #如果事务处理出现错误，则回退
             if not autocommit:
                 yield from conn.rollback()
