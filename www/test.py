@@ -10,6 +10,7 @@ async def test():
     # 没有设置默认值的一个都不能少
     u = User(name='Test', email='547280745@qq.com', passwd='1234567890', image='about:blank', id="123")
     await u.save()
+    result = await User.findAll()
 
 loop.run_until_complete(test())
 
