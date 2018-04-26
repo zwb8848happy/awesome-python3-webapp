@@ -1,16 +1,21 @@
-import orm
-from models import User, Blog, Comment
-import asyncio
+import logging; logging.basicConfig(level=logging.INFO)
+
+import asyncio, os, json, time
+from datetime import datetime
+
+from aiohttp import web
+
+def index(request):
+    return web.Response(body=b'<h1>Awesome</h1>')
+
+@asyncio.coroutine
+def init(loop):
+    app = web.Application(loop=loop)
+    app.router.add_route('GET', '/', index)
+    srv = yield from loop.create_server(app.make_handler(), '127.0.0.1', 9000)
+    logging.info('server started at http://127.0.0.1:9000...')
+    return srv
 
 loop = asyncio.get_event_loop()
-
-async def test():
-    # 创建连接池,里面的host,port,user,password需要替换为自己数据库的信息
-    await orm.create_pool(loop=loop, host='127.0.0.1', port=3306, user='root', password='root', db='awesome')
-    # 没有设置默认值的一个都不能少
-    u = User(name='Test', email='547280745@qq.com', passwd='1234567890', image='about:blank', id="123")
-    await u.save()
-    result = await User.findAll()
-
-loop.run_until_complete(test())
-
+loop.run_until_complete(init(loop))
+loop.run_forever()
