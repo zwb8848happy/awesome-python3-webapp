@@ -195,7 +195,7 @@ def add_route(app, fn):
         fn = asyncio.coroutine(fn)
     logging.info(
         'add route %s %s => %s(%s)' % (method, path, fn.__name__, ','.join(inspect.signature(fn).parameters.keys())))
-    app.router.add_route(method, path, RequestHandler(app, fn))
+    app.router.add_route(method, path, RequestHandler(app, fn))   #由于定义了__call__函数，因此可以将RequestHandler实例是为函数！即处理method，path的函数（handler）！
 
 
 # please note that 'RequestHandler(app, fn)' here is callable.
